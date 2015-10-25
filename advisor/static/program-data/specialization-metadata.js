@@ -11,7 +11,7 @@ specializationMetadata = [
         ],
         "oneOf":[
             {"twoOf":["CS6440", "CS6460", "CS7634"]},
-            {"twoOf":["CS6795", "CS7610", "CS8803CC"]}
+            {"twoOf":["CS6795", "CS7610", "CS8803-CC"]}
         ]
     },
     {
@@ -29,7 +29,7 @@ specializationMetadata = [
         "allOf":[
             {"oneOf":["CS6505"]},
             {"oneOf":["CS6601", "CS7641"]},
-            {"allOf":["CS6475", "CS6476", "CS8803AIR"]}
+            {"allOf":["CS6475", "CS6476", "CS8803-AIR"]}
             // this is a simplification, should be redone when additional CPR courses are available
             // note: Computer Vision is listed as CS7495 on the page, but the actual course number is CS6476.
         ]

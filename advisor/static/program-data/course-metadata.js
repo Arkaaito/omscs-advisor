@@ -46,6 +46,7 @@ courseMetadata = [
         "Id": "CN",
         "Summer": true,
         "EffectiveFrom": "2014-Summer", // ?
+        "Number": "CS6250",
         "ProctoredExams": 0,
         "TimedExams": 0,
         "OpenBookExams": 0,
@@ -57,6 +58,7 @@ courseMetadata = [
         "Id": "CN",
         "Summer": true,
         "EffectiveFrom": "2015-Summer",
+        "Number": "CS6250",
         "Instructors": ["Lillethun, Dave"],
         "Syllabus": "https://www.udacity.com/wiki/cn",
         "ProctoredExams": 0,
@@ -90,6 +92,7 @@ courseMetadata = [
         "Id": "SDP",
         "Summer": true,
         "EffectiveFrom": "2014-Summer",
+        "Number": "CS6300",
         "GroupProjects": 2,
         "CodingAssignments": 1,
         "WrittenAssignments": 7
@@ -98,6 +101,7 @@ courseMetadata = [
         "Id": "SDP",
         "Summer": true,
         "EffectiveFrom": "2015-Summer",
+        "Number": "CS6300",
         "GroupProjects": 0,
         "CodingAssignments": 4,
         "WrittenAssignments": 4
@@ -127,7 +131,7 @@ courseMetadata = [
         "Summer": false,
         "EffectiveFrom": "2014-Fall",
         "Instructors": ["Isbell, Charles"],
-        "CodingAssignments": 4,
+        "CodingAssignments": 4
     },
     {
         "Id": "AIR",
@@ -152,7 +156,8 @@ courseMetadata = [
     {
         "Id": "AIR",
         "Summer": true,
-        "EffectiveFrom": "2014-Summer"
+        "EffectiveFrom": "2014-Summer",
+        "Number": "CS8803-AIR"
     },
     {
         "Id": "HPCA",
@@ -259,6 +264,7 @@ courseMetadata = [
         "Id": "KBAI",
         "Summer": true,
         "EffectiveFrom": "2015-Summer",
+        "Number": "CS7637",
         "Instructors": ["Joyner, David"],
         "ProctoredExams": 0,
         "TimedExams": 0,
@@ -283,7 +289,7 @@ courseMetadata = [
         "Id": "CV",
         "Summer": false,
         "EffectiveFrom": "2014-Fall",
-        "Number": "4495",
+        "Number": "CS4495",
         "Title": "Computer Vision",
         "Summary": "This course provides an introduction to computer vision including fundamentals of image formation, camera imaging geometry, feature detection and matching, multiview geometry including stereo, motion estimation and tracking, and classification. We’ll develop basic methods for applications that include finding known models in images, depth recovery from stereo, camera calibration, image stabilization, automated alignment (e.g. panoramas), tracking, and action recognition. We focus less on the machine learning aspect of CV as that is really classification theory best learned in an ML course.\n\nThe focus of the course is to develop the intuitions and mathematics of the methods in lecture, and then to learn about the difference between theory and practice in the problem sets. All algorithms work perfectly in the slides. But remember what Yogi Berra said: In theory there is no difference between theory and practice. In practice there is. (Einstein said something similar but who knows more about real life?) In this course you do not, for the most part, apply high-level library functions but use low to mid level algorithms to analyze images and extract structural information.",
         "Instructors": ["Essa, Irfan"],
@@ -329,7 +335,8 @@ courseMetadata = [
     {
         "Id": "CP",
         "Summer": true,
-        "EffectiveFrom": "2015-Summer"
+        "EffectiveFrom": "2015-Summer",
+        "Number": "CS6475"
     },
     {
         "Id": "IOS",
@@ -354,7 +361,8 @@ courseMetadata = [
     {
         "Id": "IOS",
         "Summer": true,
-        "EffectiveFrom": "2015-Summer"
+        "EffectiveFrom": "2015-Summer",
+        "Number": "CS8803-IOS"
     },
     {
         "Id": "EdTech",
@@ -379,7 +387,8 @@ courseMetadata = [
     {
         "Id": "EdTech",
         "Summer": true,
-        "EffectiveFrom": "2016-Summer"
+        "EffectiveFrom": "2016-Summer",
+        "Number": "CS6460"
     },
     {
         "Id": "ML4T",

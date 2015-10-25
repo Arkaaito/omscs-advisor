@@ -1,0 +1,528 @@
+{% load staticfiles %}
+{% load menu %}{% generate_menu %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>omscs-advisor</title>
+    <!-- <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" /> -->
+    <link rel="stylesheet" type="text/css" href="{% static "third-party/css/bootstrap.css" %}" />
+    <script type="text/javascript" src="{%  static "third-party/js/jquery-2.1.4.js" %}"></script>
+    <script type="text/javascript" src="{%  static "third-party/js/jquery-ui.js" %}"></script>
+    <script type="text/javascript" src="{%  static "third-party/js/bootstrap.js" %}"></script>
+    <!-- I need a real theme for this at some point; also proper responsive (width) sizing.
+        In the meantime, I am using fixed-width and a color scheme vaguely borrowed from
+        the Flatly Bootstrap theme (https://bootswatch.com/flatly/). -->
+    <style type="text/css">
+        #plan {
+            width: 760pt;
+            display: inline-block;
+            float: left;
+        }
+        .term-wrapper {
+            border: 1pt solid #2c3e50;
+            margin: 10pt;
+            padding: 10pt;
+            border-radius: 6pt;
+        }
+        .term-wrapper .term-name {
+            color: #2c3e50;
+            font-size: 18pt;
+            font-weight: 400;
+        }
+        .course-thumbnail {
+            padding: 10pt 0;
+            margin: 20pt;
+            height: 100pt;
+            border-radius: 9pt;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+        }
+        a:hover .course-thumbnail  {
+            color: #567ca0;
+        }
+        .course-thumbnail .course-logo {
+            width: 15%;
+            padding: 20pt;
+            border-right: 1pt solid #2c3e50;
+            float: left;
+            text-align: center;
+            color: inherit;
+            position: relative;
+            top: 50%;
+            -ms-transform: translateY(-50%);
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+        .course-logo .number {
+            clear: both;
+            font-weight: bolder;
+            color: inherit;
+        }
+        .course-logo .id {
+            clear: both;
+            font-weight: bold;
+            color: inherit;
+        }
+        .course-thumbnail .course-info {
+            width: 85%;
+            float: right;
+            padding: 5pt 20pt;
+            color: inherit;
+            font-size: 14pt;
+        }
+        .course-info .title {
+            color: inherit;
+        }
+        .course-info .presenter {
+            color: inherit;
+        }
+        .course-info .instructor {
+            color: inherit;
+        }
+        .course-info .callout {
+            color: inherit;
+        }
+        .course-info .callout label {
+            color: inherit;
+        }
+        .settings-panel {
+            width: 260pt;
+            display: inline-block;
+            float: left;
+            border-left: 2pt solid #2c3e50;
+            border-bottom: 2pt solid #2c3e50;
+            padding: 10pt;
+        }
+        .settings-panel .option-group {
+            padding: 10pt;
+        }
+        .settings-panel .option-header {
+            text-decoration: underline;
+        }
+        .navbar-default {
+            padding-left: 20pt;
+            padding-right: 20pt;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/login/">Login</a></li>
+        </ul>
+    </nav>
+    <div id="plan"></div>
+    <div id="preferences" class="settings-panel">
+        <div class="option-group">
+            <div class="option-header">Specializations:</div>
+            <div id="specializations">
+                <input id="II" type="checkbox" name="specialization" value="II" checked />
+                <label for="II">Interactive Intelligence</label><br/>
+                <input id="CPR" type="checkbox" name="specialization" value="CPR" checked />
+                <label for="CPR">Computational Perception & Robotics</label><br/>
+                <input id="ML" type="checkbox" name="specialization" value="ML" checked />
+                <label for="ML">Machine Learning</label><br/>
+                <input id="HPC" type="checkbox" name="specialization" value="HPC" checked />
+                <label for="HPC">High-Performance Computing</label><br/>
+                <input id="Sys" type="checkbox" name="specialization" value="Sys" checked />
+                <label for="Sys">Systems</label><br/>
+            </div>
+        </div>
+        <div class="option-group">
+            <div class="option-header">Graduation:</div>
+            <select id="graduation" name="graduation">
+                <!-- TODO: setting these explicitly seems a bit silly - maybe just dump out both this and the JS from Django. -->
+                <option value="2017-Fall">Fall 2017</option>
+                <option value="2018-Spring">Spring 2018</option>
+                <option value="2018-Summer">Summer 2018</option>
+                <option value="2018-Fall">Fall 2018</option>
+                <option value="2019-Spring">Spring 2019</option>
+                <option value="2019-Summer">Summer 2019</option>
+                <option value="2019-Fall">Fall 2019</option>
+                <option value="2020-Spring">Spring 2020</option>
+                <option value="2020-Summer">Summer 2020</option>
+                <option value="2020-Fall">Fall 2020</option>
+                <option value="2021-Spring">Spring 2021</option>
+                <option value="2021-Summer">Summer 2021</option>
+                <option value="2021-Fall">Fall 2021</option>
+            </select>
+        </div>
+        <div class="option-group">
+            <div class="option-header">Constraints:</div>
+            <label for="hours">Max hours:</label>
+            <select id="hours" name="hours">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+            </select>
+            per week.<br/>
+            <a class="btn btn-default" onclick="javascript:refreshPlan();">Update Plan</a>
+        </div>
+        <!-- <a class="btn btn-default" onclidk="javascript:savePlan();">Save Plan</a> -->
+    </div>
+
+    <script type="text/javascript" src="{%  static "program-data/course-metadata.js" %}"></script>
+    <script type="text/javascript" src="{%  static "program-data/specialization-metadata.js" %}"></script>
+    <script type="text/javascript">
+        var upcomingTerms = [
+            "2016-Spring", "2016-Summer", "2016-Fall",
+            "2017-Spring", "2017-Summer", "2017-Fall",
+            "2018-Spring", "2018-Summer", "2018-Fall",
+            "2019-Spring", "2019-Summer", "2019-Fall",
+            "2020-Spring", "2020-Summer", "2020-Fall",
+            "2021-Spring", "2021-Summer", "2021-Fall"
+        ];
+
+        function evalConstraintTerms(type, terms, courses) {
+            var max = terms.length;
+            var count = 0;
+            var weighted = 0;
+            var constraintValues = [];
+            for (key in terms) {
+                //constraintValues.push(evalConstraint(terms[key], courses));
+                var val = evalConstraint(terms[key], courses);
+                count = count + ((val < 0) ? -1 : 0);
+                weighted = weighted + val;
+            }
+
+            // TODO: tweak weightings
+            if (type == "allOf") {
+                return (1.100) * (weighted);
+            } else if (type == "threeOf") {
+                return (1.067) * Math.min(0, max + count - 3) * -weighted;
+            } else if (type == "twoOf") {
+                return (1.033) * Math.min(0, max + count - 2) * -weighted;
+            } else if (type == "oneOf") {
+                return (1.000) * Math.min(0, max + count - 1) * -weighted;
+            }
+        }
+
+        function evalConstraint(constraint, courses) {
+            if (typeof constraint == "string") {
+                /*
+                return (courses.map(function (course) {
+                    course["Number"];
+                }).indexOf(constraint) > -1) ? 0 : -1;
+                */
+                return (courses.indexOf(constraint) > -1) ? 0 : -1;
+            } else {
+                // implicit "allOf"
+                var count = 0;
+                for (key in constraint) {
+                    if (constraint.hasOwnProperty(key)) {
+                        var type = key;
+                        var children = constraint[key];
+                        count += evalConstraintTerms(key, children, courses);
+                    }
+                }
+                return count;
+            }
+        }
+        function evalSpecialization(specializationId, courses) {
+            var constraint = {};
+            var specialization = null;
+            specializationMetadata.forEach(function (s) { if (s["specializationId"] == specializationId) specialization = s; });
+            for (key in specialization) {
+                if (key == "allOf" || key == "threeOf" ||  key == "twoOf" || key == "oneOf") {
+                    constraint[key] = specialization[key];
+                }
+            }
+
+            var incompletePenalty = 0;
+            if (specializationId == "HPC") incompletePenalty = -100;
+            if (specializationId == "ML") incompletePenalty = -50;
+            if (specializationId == "Sys") incompletePenalty = -25;
+            var hoursPenalty = -Math.max((10-courses.length)*0.5, 0);
+            return evalConstraint(constraint, courses) + incompletePenalty + hoursPenalty;
+        }
+
+
+        function courseInfo(number, term) {
+            // TODO: should pull from per-term info
+            for (key in courseMetadata) {
+                var course = courseMetadata[key];
+                if (course["Number"] == number) return course;
+            }
+            return null;
+        }
+
+        function courseHours(number) {
+            var course = courseInfo(number);
+            if (course != null)
+                // TODO: eventually all of this should come from the aggregated reviews.
+                // TODO: for now, they're based on my informal (manual) scan of UOCRSS,
+                // TODO: and some arbitrary "guesstimates" for new courses this term.
+                switch (number) {
+                    case "CS6210":
+                        return 25;
+                    case "CS6250":
+                        return 5;
+                    case "CS6300":
+                        return 10;
+                    case "CS7641":
+                        return 30;
+                    case "CS8803-AIR":
+                        return 8;
+                    case "CS6290":
+                        return 17;
+                    case "CS6310":
+                        return 9;
+                    case "CS6440":
+                        return 12;
+                    case "CS6505":
+                        return 16;
+                    case "CS7637":
+                        return 15;
+                    case "CS4495":
+                        return 15;
+                    case "CS6475":
+                        return 15;
+                    case "CS8803-IOS":
+                        return 18;
+                    case "CS6460":
+                        return 20;
+                    case "CS7646":
+                        return 2;
+                    case "CS8803-RL":
+                        return 5;
+                    case "CS6035":
+                        return 10;
+                    case "CSE6220":
+                        return 15;
+                    case "CS8803-BD":
+                    case "CS6262":
+                    case "CS6400":
+                    default:
+                        // ~_(ツ)_~
+                        return 10;
+                }
+
+                //return course["Hours"];
+            else
+                return 1000;
+        }
+
+        function termIsSummer(term) {
+            return term.indexOf("Summer") > -1;
+        }
+
+        function termCourseCap(term) {
+            if (termIsSummer(term)) {
+                return 1;
+            } else {
+                return 3;
+            }
+        }
+
+        function termCoursesAvailable(term) {
+            // TODO: not retrieving the associated info from the corresponding term; retrieving it from the earliest one
+            var candidates = courseMetadata.filter(function (course) {
+                if (typeof course["Number"] == "undefined")
+                return false;
+                if (termIsSummer(term)) {
+                    return (course["Summer"]) && (upcomingTerms.indexOf(course["AvailableFrom"]) <= upcomingTerms.indexOf(term));
+                } else {
+                    return (!course["Summer"]) && (upcomingTerms.indexOf(course["AvailableFrom"]) <= upcomingTerms.indexOf(term));
+                }
+            });
+            return candidates.map(function (course) {
+                return course["Number"];
+            });
+        }
+
+        function coursesHoursUsed(courses) {
+            return courses.map(function (course) { return courseHours(course); })
+                    .reduce(function(previousValue, currentValue, index, array) {
+                        return previousValue + currentValue;
+                    }, 0);
+        }
+
+        /**
+         * Calculate a new plan.
+         *
+         * @param allowedSpecializations - from the list defined in specialization-metadata.js
+         * @param graduationTarget - term selected from upcomingTerms
+         * @param maxHours - Javascript object {} - keys are values from upcomingTerms, values are numbers
+         * @param fixedCourses - from the list defined in course-metadata.js
+         */
+        function updatePlan(allowedSpecializations, graduationTarget, maxHours, fixedCourses) {
+            var specializationScores = allowedSpecializations.map(function (s) { return evalSpecialization(s, fixedCourses); });
+            // For now, we're picking the specialization they're closest to; later we'll give higher weights to scores
+            // that satisfy more than one specialization, especially early in the plan.
+            var specialization = allowedSpecializations[specializationScores.indexOf(Math.max.apply(Math, specializationScores))];
+            var coursesIncluded = fixedCourses.slice();
+            var termsIncluded = upcomingTerms.slice(0, upcomingTerms.indexOf(graduationTarget) + 1);
+            var byTerm = {};
+            for (key in termsIncluded) {
+                var term = termsIncluded[key];
+                var hoursAvailable = maxHours[term];
+                // Note: it should never be *necessary* to filter these courses out, since it will
+                // never enhance the plan to include a duplicate course.
+                var coursesEligible = termCoursesAvailable(term).filter(function (course) {
+                    return !(coursesIncluded.indexOf(course) > -1);
+                });
+
+                var termCourses = [];
+                var courseToAdd = null;
+                // while there's still a course that will fit into the current term...
+                do {
+                    var bestPlan = coursesIncluded.slice();
+                    var planScore = evalSpecialization(specialization, bestPlan);
+                    for (var i = 0; i < coursesEligible.length; i++) {
+                        // Evaluate the plan score for each available course.
+                        var coursesEvaluating = coursesIncluded.slice();
+                        coursesEvaluating.push(coursesEligible[i]);
+                        var scoreEvaluating = evalSpecialization(specialization, coursesEvaluating);
+                        if (coursesHoursUsed(coursesEvaluating) > hoursAvailable) continue;
+
+                        if (scoreEvaluating > planScore) {
+                            // Pick the one that yields the highest plan score.
+                            bestPlan = coursesEvaluating;
+                            courseToAdd = coursesEligible[i];
+                            planScore = scoreEvaluating;
+                        } else if (scoreEvaluating == planScore && courseHours(coursesEvaluating) < courseHours(bestPlan)) {
+                            // Or if there's a tie, pick the one with the lowest number of hours.
+                            bestPlan = coursesEvaluating;
+                            courseToAdd = coursesEligible[i];
+                            planScore = scoreEvaluating;
+                        }
+
+                    }
+                    if (courseToAdd == null) break;
+                    termCourses.push(courseToAdd);
+                    coursesIncluded.push(courseToAdd);
+                    if (termCourses.length >= termCourseCap(term)) break;
+
+                    coursesEligible = termCoursesAvailable(term).filter(function (course) {
+                        return !(coursesIncluded.indexOf(course) > -1);
+                    });
+                    courseToAdd = null;
+                } while (coursesEligible.length > 0 && evalSpecialization(specialization, coursesIncluded) < 0);
+                byTerm[term] = termCourses;
+            }
+
+            if (evalSpecialization(specialization, coursesIncluded) < 0) {
+                // We're out of terms, but still need more courses...
+
+                var termsEligible = termsIncluded.slice().filter(function (term) {
+                    return byTerm[term].length < termCourseCap(term);
+                });
+                while (termsEligible.length > 0 && evalSpecialization(specialization, coursesIncluded) < 0) {
+                    // Find the term with the lowest number of hours currently
+                    var termHours = termsEligible
+                            .map(function (term) { return coursesHoursUsed(byTerm[term]); });
+                    var minTermIndex = termHours.indexOf(Math.min.apply(Math, termHours));
+                    var term = termsEligible[minTermIndex];
+                    var coursesEligible = termCoursesAvailable(term).filter(function (course) {
+                        return !(coursesIncluded.indexOf(course) > -1);
+                    });
+
+                    var courseToAdd = null;
+                    // TODO: refactor & consolidate this with the initial setup code
+                    var bestPlan = coursesIncluded.slice();
+                    var planScore = evalSpecialization(specialization, bestPlan);
+                    for (var i = 0; i < coursesEligible.length; i++) {
+                        // Evaluate the plan score for each available course.
+                        var coursesEvaluating = coursesIncluded.slice();
+                        coursesEvaluating.push(coursesEligible[i]);
+                        var scoreEvaluating = evalSpecialization(specialization, coursesEvaluating);
+
+                        if (scoreEvaluating > planScore) {
+                            // Pick the one that yields the highest plan score.
+                            bestPlan = coursesEvaluating;
+                            courseToAdd = coursesEligible[i];
+                            planScore = scoreEvaluating;
+                        } else if (scoreEvaluating == planScore && courseHours(coursesEvaluating) < courseHours(bestPlan)) {
+                            // Or if there's a tie, pick the one with the lowest number of hours.
+                            bestPlan = coursesEvaluating;
+                            courseToAdd = coursesEligible[i];
+                            planScore = scoreEvaluating;
+                        }
+                    }
+                    if (courseToAdd == null) {
+                        termsEligible.splice(termsEligible.indexOf(term), 1);
+                        continue;
+                    }
+                    coursesIncluded.push(courseToAdd);
+                    byTerm[term].push(courseToAdd);
+                    if (termCourses.length >= termCourseCap(term)) continue;
+
+                    termsEligible = termsIncluded.slice().filter(function (term) {
+                        return byTerm[term].length < termCourseCap(term);
+                    });
+                }
+            }
+
+            if (evalSpecialization(specialization, coursesIncluded) < 0) {
+                // No courses will bring us closer to our goal, but we're still not at our goal...
+                // Provide the generated plan, but also provide a warning (the specialization cannot be reached)
+                alert("The specialization you have selected (" + specialization + ") cannot be fulfilled in this timeframe with the available courses.");
+            }
+            return byTerm;
+        }
+
+        function displayPlan(plan) {
+            $("#plan").html("");
+            for (termName in plan) {
+                if (plan.hasOwnProperty(termName)) {
+                    var term = plan[termName];
+                    var termBucket = $.parseHTML('<div class="term-wrapper"><div class="term-name">'+termName+'</div></div>');
+                    for (i in term) {
+                        if (term.hasOwnProperty(i)) {
+                            var course = courseInfo(plan[termName][i], termName);
+                            var el = $.parseHTML('<div class="course-thumbnail"></div>');
+                            var logo = $.parseHTML('<div class="course-logo">'
+                                    +'<span class="number">'+course["Number"]+'</span><br/><span class="id">("'+course["Id"]+'")</span></div>');
+                            el[0].appendChild(logo[0]);
+
+                            var title = (typeof course["Title"] == "string") ? course["Title"] : course["Number"];
+                            var instructors = (typeof course["Instructors"] != "undefined") ? course["Instructors"].join("; ") : "";
+                            var vitals = $.parseHTML('<div class="course-info">'
+                                    +'<div class="title">'+title+'</div>'
+                                    +'<div class="presenter">'+instructors+'</div>'
+                                    +'</div>');
+                            el[0].appendChild(vitals[0]);
+                            if (typeof course["Readiness"] == "string") {
+                                var link = $.parseHTML('<a href="'+course["Readiness"]+'" target="_blank"></a>');
+                                link[0].appendChild(el[0]);
+                                termBucket[0].appendChild(link[0]);
+                            } else {
+                                termBucket[0].appendChild(el[0]);
+                            }
+                        }
+                    }
+                    $("#plan").append(termBucket[0]);
+                }
+            }
+        }
+
+        function refreshPlan() {
+            var allowedSpecializations = [];
+            $('#specializations input:checked').each(function(index) { allowedSpecializations.push($(this).val()); });
+            /*
+            specializationMetadata.forEach(function(specialization) {
+                allowedSpecializations.push(specialization["specializationId"]);
+            });
+            //var plan = updatePlan(allowedSpecializations, "2018-Fall", maxHours, []);
+            //var plan = updatePlan(["II"], "2017-Fall", maxHours, []);
+            */
+            var defaultCap = $('#hours').val();
+            var maxHours = [];
+            upcomingTerms.forEach(function(term) {
+                maxHours[term] = defaultCap;
+            });
+            var gradDate = $('#graduation').val();
+
+            var plan = updatePlan(allowedSpecializations, gradDate, maxHours, []);
+            displayPlan(plan);
+        }
+
+        refreshPlan();
+    </script>
+</body>
+</html>
