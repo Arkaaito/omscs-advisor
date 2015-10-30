@@ -494,7 +494,7 @@ courseMetadata = [
     {
         "Id": "NetSec",
         "Summer": false,
-        "EffectiveFrom": "2016-Spring",
+        "EffectiveFrom": "2016-Fall",
         "Number": "CS6262",
         "Title": "Network Security"
     },
@@ -508,7 +508,7 @@ courseMetadata = [
     {
         "Id": "AI",
         "Summer": false,
-        "EffectiveFrom": "2016-Spring",
+        "EffectiveFrom": "2016-Fall",
         "Number": "CS6601",
         "Title": "Artificial Intelligence"
     },
@@ -522,7 +522,7 @@ courseMetadata = [
     {
         "Id": "DVA",
         "Summer": false,
-        "EffectiveFrom": "2016-Spring",
+        "EffectiveFrom": "2016-Fall",
         "Number": "CSE6242",
         "Title": "Data and Visual Analytics"
     },
