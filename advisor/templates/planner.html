@@ -325,9 +325,9 @@
                 if (typeof course["Number"] == "undefined")
                 return false;
                 if (termIsSummer(term)) {
-                    return (course["Summer"]) && (upcomingTerms.indexOf(course["AvailableFrom"]) <= upcomingTerms.indexOf(term));
+                    return (course["Summer"]) && (upcomingTerms.indexOf(course["EffectiveFrom"]) <= upcomingTerms.indexOf(term));
                 } else {
-                    return (!course["Summer"]) && (upcomingTerms.indexOf(course["AvailableFrom"]) <= upcomingTerms.indexOf(term));
+                    return (!course["Summer"]) && (upcomingTerms.indexOf(course["EffectiveFrom"]) <= upcomingTerms.indexOf(term));
                 }
             });
             return candidates.map(function (course) {
