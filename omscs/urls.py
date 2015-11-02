@@ -18,6 +18,7 @@ from django.contrib import admin
 from advisor import views
 
 urlpatterns = [
+    url(r'^', include('django.contrib.auth.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^planner/', views.planner, name='planner'),
     url(r'^', views.home, name='home')
