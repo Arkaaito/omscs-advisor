@@ -1,0 +1,47 @@
+[
+    {
+        "specializationName": "Interactive Intelligence",
+        "specializationId": "II",
+        "allOf": {
+            "allOf":[
+                {"oneOf":["SDP", "CCA"]},
+                {"twoOf":["KBAI", "ML"]}
+            ],
+            "oneOf":[
+                {"twoOf":["HIT", "EdTech", "AIS"]},
+                {"twoOf":["ICS", "MAD", "CC"]}
+            ]
+        }
+    },
+    {
+        "specializationName": "Machine Learning",
+        "specializationId": "ML",
+        "allOf":{
+            "allOf":[
+                {"oneOf":["CCA"]},
+                {"oneOf":["ML"]}
+            ],
+            "threeOf":["ML4T"]
+        }
+    },
+    {
+        "specializationName": "Computational Perception & Robotics",
+        "specializationId": "CPR",
+        "allOf":[
+            {"oneOf":["CCA"]},
+            {"oneOf":["AI", "ML"]},
+            {"allOf":["CP", "CV", "AIR"]}
+        ]
+    },
+    {
+        "specializationName": "Computing Systems",
+        "specializationId": "Sys",
+        "allOf":{
+            "allOf":[
+                "CCA",
+                {"twoOf":["AOS", "CN", "HPCA", "SDP", "DBSys"]}
+            ],
+            "threeOf":["InfoSec", "NetSec", "SAD"]
+        }
+    }
+]

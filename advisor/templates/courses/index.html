@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load thumbnails %}
+
+{% block localstyles %}
+<style>
+    #content {
+        margin: 0pt auto;
+        max-width: 720pt;
+    }
+    h3, h4 {
+        padding: 0 20pt;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <h3>All Courses</h3>
+    <h4>(Showing offerings for {% term term %})</h4>
+    {% for offering in courses %}
+        <a href="/course/{{ offering.course.id }}/view/">
+            <div class="course-thumbnail">
+                <div class="course-logo">
+                    <span class="number">{{ offering.course.number }}</span><br/>
+                    <span class="id">{{ offering.course.key }}</span>
+                </div>
+                <div class="course-info">
+                    <div class="title">{{ offering.course.title }}</div>
+                    <div class="presenter">{{ offering.instructors }}</div>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+{% endblock %}

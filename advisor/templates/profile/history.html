@@ -1,0 +1,23 @@
+{% extends "base_profile.html" %}
+
+{% load thumbnails %}
+
+{% block main_pane %}
+    {% if can_edit %}
+    <div>Something missing? <a href="/courses">Add a course!</a></div>
+    {% endif %}
+    {% for term_name,reviews in history.iteritems %}
+    <div class="term-wrapper">
+        <div class="term-name">{% term term_name %}</div>
+        {% for review in reviews %}
+            {% if can_edit %}
+                <a href="/course/{{ review.offering.course_id }}/review">
+            {% endif %}
+                {% review_thumbnail review show_reviewer=False %}
+            {% if can_edit %}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endfor %}
+{% endblock %}

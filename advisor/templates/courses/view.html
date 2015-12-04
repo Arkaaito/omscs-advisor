@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load thumbnails %}
+
+{% block content %}
+<h1 style="text-align: center;">{{ course.number }}</h1>
+<h3 style="text-align: center;">({{ course.title }})</h3>
+<div class="col-xs-12 col-lg-6" style="margin: 40pt 0">
+    <div>Established: {% term course.offered_from  %}</div>
+    <div>
+        <a href="{{ course.info_link }}">Course info</a>
+    </div>
+    {% if course.readiness_link %}
+    <div>
+        <a href="{{ course.readiness_link }}">Readiness test</a>
+    </div>
+    {% endif %}
+    {% if course.syllabus_link %}
+    <div>
+        <a href="{{ course.syllabus_link }}">Recent syllabus</a>
+    </div>
+    {% endif %}
+</div>
+<div class="col-xs-12 col-lg-6" style="margin-top: 40pt">
+    <h5><b>{{ offering.instructors }}</b> presenting</h5>
+</div>
+
+<div class="col-xs-12" style="padding: 30pt 10pt; border-top:1pt #000000 solid;">
+    <h4>Reviews</h4><span>Taken it? <a href="/course/{{ course.id }}/review">Review it!</a></span>
+    {% for review in reviews %}
+        {% review_thumbnail review show_reviewer=True %}
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base_profile.html" %}
+
+{% load thumbnails %}
+
+{% block main_pane %}
+    {% if not plan %}
+        {% if can_edit %}
+            <div>You haven't planned your courses... <a href="/planner">yet!</a></div>
+        {% else %}
+            <div>Oops - it looks like this user hasn't shared their plan with you.</div>
+        {% endif %}
+    {% else %}
+        {% if can_edit %}
+        <div>Out of date? <a href="/planner">Edit me!</a></div>
+        {% endif %}
+        {% for term in plan %}
+        <div class="term-wrapper">
+            <div class="term-name">{% term term.target_term %}</div>
+            {% for offering in term.offerings.all %}
+                {% course_thumbnail offering %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

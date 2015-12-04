@@ -1,0 +1,16 @@
+<div class="course-thumbnail">
+    <div class="course-logo">
+        <span class="number">{{ offering.course.number }}</span>
+        <span class="id">{{ offering.course.key }}</span>
+    </div>
+    <div class="course-info">
+        {% if offering.course.readiness %}
+            <a href="{{ offering.course.readiness }}" target="_blank">
+        {% endif %}
+        <div class="title">{{ offering.course.title }}</div>
+        <div class="presenter">{{ offering.instructors }}</div>
+        {% if offering.course.readiness %}
+            </a>
+        {% endif %}
+    </div>
+</div>

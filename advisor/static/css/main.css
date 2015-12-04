@@ -1,0 +1,157 @@
+/* Sitewide styles */
+.navbar-default {
+    padding-left: 20pt;
+    padding-right: 20pt;
+}
+#content {
+    padding: 0 30pt;
+}
+#sidebar {
+    height: 100%;
+}
+
+/* Plan styles */
+
+
+/* I need a real theme for this at some point; also proper responsive (width) sizing.
+    In the meantime, I am using fixed-width and a color scheme vaguely borrowed from
+    the Flatly Bootstrap theme (https://bootswatch.com/flatly/). */
+#plan {
+    width: 760pt;
+    display: inline-block;
+    float: left;
+    min-height: 400pt;
+}
+.term-wrapper {
+    border: 1pt solid #2c3e50;
+    margin: 10pt;
+    padding: 10pt;
+    border-radius: 6pt;
+}
+.term-wrapper .term-name {
+    color: #2c3e50;
+    font-size: 18pt;
+    font-weight: 400;
+}
+.course-thumbnail, .review-thumbnail {
+    padding: 10pt 0;
+    margin: 20pt;
+    height: 100pt;
+    border-radius: 9pt;
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+#plan .course-thumbnail {
+    margin: 0pt 20pt;
+}
+a:hover .course-thumbnail, a:hover .review-thumbnail  {
+    color: #567ca0;
+}
+.course-thumbnail .course-logo, .review-thumbnail .course-logo {
+    width: 15%;
+    max-width: 100pt;
+    padding: 20pt;
+    border-right: 1pt solid #2c3e50;
+    float: left;
+    text-align: center;
+    color: inherit;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.course-logo .number {
+    clear: both;
+    font-weight: bolder;
+    color: inherit;
+}
+.course-logo .id {
+    clear: both;
+    font-weight: bold;
+    color: inherit;
+}
+.course-thumbnail .course-info, .review-thumbnail .course-info {
+    width: 85%;
+    float: right;
+    padding: 5pt 20pt;
+    color: inherit;
+    font-size: 14pt;
+}
+.course-info .title {
+    color: inherit;
+}
+.course-info .presenter {
+    color: inherit;
+}
+.course-info .instructor {
+    color: inherit;
+}
+.course-info .callout {
+    color: #2c3e50;
+    border: 1pt #2c3e50 solid;
+    padding: 5pt 5pt;
+    margin: 5pt 20pt 0pt 0pt;
+    float: left;
+    text-align: center;
+}
+.course-info .callout label {
+    color: #2c3e50;
+}
+
+/* TODO: tweak these styles (right now they are copied from course thumbnails) */
+.profile-image {
+    width: 15%;
+    max-width: 100pt;
+    padding: 20pt;
+    border-right: 1pt solid #2c3e50;
+    float: left;
+    text-align: center;
+    color: inherit;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.profile-image .name {
+    clear: both;
+    font-weight: bolder;
+    color: inherit;
+}
+.profile-image .title {
+    clear: both;
+    font-weight: bold;
+    color: inherit;
+}
+
+.settings-panel {
+    width: 260pt;
+    display: inline-block;
+    float: left;
+    border-left: 2pt solid #2c3e50;
+    border-bottom: 2pt solid #2c3e50;
+    padding: 10pt;
+}
+.settings-panel .option-group {
+    padding: 10pt;
+}
+.settings-panel .option-header {
+    text-decoration: underline;
+}
+
+#addCourseButton {
+    width: 740pt;
+    margin: 10pt;
+    padding: 10pt;
+    font-size: 12pt;
+    border-radius: 9pt;
+    background-color: #ecf0db;
+}
+#addCoursePrompt:hover, .delete-option:hover, #addCourseConfirm:hover {
+    color: #567ca0;
+    cursor: pointer;
+}
+#addCoursePrompt, #addCourseConfirm, #addCourseId, #addCourseTerm {
+    display: inline-block;
+}

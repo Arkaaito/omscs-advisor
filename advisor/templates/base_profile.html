@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+    <div id="sidebar" class="col-xs-4 col-lg-1">
+        {% block sidebar %}
+        {% if viewee %}
+        <ul>
+            <li><a href="/profile/info/{{ viewee.id }}">Bio</a></li>
+            <li><a href="/profile/history/{{ viewee.id }}">History</a></li>
+            <li><a href="/profile/plan/{{ viewee.id }}">Plan</a></li>
+        </ul>
+        {% elif user %}
+        <ul>
+            <li><a href="/profile/info/">Bio</a></li>
+            <li><a href="/profile/history/">History</a></li>
+            <li><a href="/profile/plan/">Plan</a></li>
+            <li><a href="/profile/account/">Account</a></li>
+        </ul>
+        {% endif %}
+        {% endblock %}
+    </div>
+
+    <div id="main_pane" class="col-xs-8 col-lg-11">
+        {% block main_pane %}{% endblock %}
+    </div>
+</body>
+{% endblock %}

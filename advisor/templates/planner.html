@@ -1,118 +1,36 @@
-{% load staticfiles %}
-{% load menu %}{% generate_menu %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>omscs-advisor</title>
-    <!-- <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" /> -->
-    <link rel="stylesheet" type="text/css" href="{% static "third-party/css/bootstrap.css" %}" />
-    <script type="text/javascript" src="{%  static "third-party/js/jquery-2.1.4.js" %}"></script>
-    <script type="text/javascript" src="{%  static "third-party/js/jquery-ui.js" %}"></script>
-    <script type="text/javascript" src="{%  static "third-party/js/bootstrap.js" %}"></script>
-    <!-- I need a real theme for this at some point; also proper responsive (width) sizing.
-        In the meantime, I am using fixed-width and a color scheme vaguely borrowed from
-        the Flatly Bootstrap theme (https://bootswatch.com/flatly/). -->
-    <style type="text/css">
-        #plan {
-            width: 760pt;
-            display: inline-block;
-            float: left;
-        }
-        .term-wrapper {
-            border: 1pt solid #2c3e50;
-            margin: 10pt;
-            padding: 10pt;
-            border-radius: 6pt;
-        }
-        .term-wrapper .term-name {
-            color: #2c3e50;
-            font-size: 18pt;
-            font-weight: 400;
-        }
-        .course-thumbnail {
-            padding: 10pt 0;
-            margin: 20pt;
-            height: 100pt;
-            border-radius: 9pt;
-            background-color: #ecf0f1;
-            color: #2c3e50;
-        }
-        a:hover .course-thumbnail  {
-            color: #567ca0;
-        }
-        .course-thumbnail .course-logo {
-            width: 15%;
-            padding: 20pt;
-            border-right: 1pt solid #2c3e50;
-            float: left;
-            text-align: center;
-            color: inherit;
-            position: relative;
-            top: 50%;
-            -ms-transform: translateY(-50%);
-            -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
-        }
-        .course-logo .number {
-            clear: both;
-            font-weight: bolder;
-            color: inherit;
-        }
-        .course-logo .id {
-            clear: both;
-            font-weight: bold;
-            color: inherit;
-        }
-        .course-thumbnail .course-info {
-            width: 85%;
-            float: right;
-            padding: 5pt 20pt;
-            color: inherit;
-            font-size: 14pt;
-        }
-        .course-info .title {
-            color: inherit;
-        }
-        .course-info .presenter {
-            color: inherit;
-        }
-        .course-info .instructor {
-            color: inherit;
-        }
-        .course-info .callout {
-            color: inherit;
-        }
-        .course-info .callout label {
-            color: inherit;
-        }
-        .settings-panel {
-            width: 260pt;
-            display: inline-block;
-            float: left;
-            border-left: 2pt solid #2c3e50;
-            border-bottom: 2pt solid #2c3e50;
-            padding: 10pt;
-        }
-        .settings-panel .option-group {
-            padding: 10pt;
-        }
-        .settings-panel .option-header {
-            text-decoration: underline;
-        }
-        .navbar-default {
-            padding-left: 20pt;
-            padding-right: 20pt;
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-default">
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="/login/">Login</a></li>
-        </ul>
-    </nav>
-    <div id="plan"></div>
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div id="addCourseButton">
+        <div id="addCoursePrompt" onclick="javascript:toggleAddCourseOptions()">
+            <span class="fa fa-plus fa-lg" style="padding:0pt 5pt"></span>
+            Pick a course yourself?
+        </div>
+        <select id="addCourseTerm" onchange="javascript:updateAddCourseOptions()" style="display:none">
+                <option value="Spring2016" selected>Spring 2016</option>
+                <option value="Summer2016">Summer 2016</option>
+                <option value="Fall2016">Fall 2016</option>
+                <option value="Spring2017">Spring 2017</option>
+                <option value="Summer2017">Summer 2017</option>
+                <option value="Fall2017">Fall 2017</option>
+                <option value="Spring2018">Spring 2018</option>
+                <option value="Summer2018">Summer 2018</option>
+                <option value="Fall2018">Fall 2018</option>
+                <option value="Spring2019">Spring 2019</option>
+                <option value="Summer2019">Summer 2019</option>
+                <option value="Fall2019">Fall 2019</option>
+                <option value="Spring2020">Spring 2020</option>
+                <option value="Summer2020">Summer 2020</option>
+                <option value="Fall2020">Fall 2020</option>
+                <option value="Spring2021">Spring 2021</option>
+                <option value="Summer2021">Summer 2021</option>
+                <option value="Fall2021">Fall 2021</option>
+        </select>
+        <select id="addCourseId" style="display:none"></select>
+        <div id="addCourseConfirm" onclick="javascript:addCourse();" style="display:none"><span class="fa fa-check-circle"></span></div>
+    </div>
+    <div id="plan"><span style="font-size: 60pt; text-align: center; width: 100%;" class="fa fa-cog fa-spin"></span></div>
     <div id="preferences" class="settings-panel">
         <div class="option-group">
             <div class="option-header">Specializations:</div>
@@ -123,8 +41,6 @@
                 <label for="CPR">Computational Perception & Robotics</label><br/>
                 <input id="ML" type="checkbox" name="specialization" value="ML" checked />
                 <label for="ML">Machine Learning</label><br/>
-                <input id="HPC" type="checkbox" name="specialization" value="HPC" checked />
-                <label for="HPC">High-Performance Computing</label><br/>
                 <input id="Sys" type="checkbox" name="specialization" value="Sys" checked />
                 <label for="Sys">Systems</label><br/>
             </div>
@@ -133,19 +49,19 @@
             <div class="option-header">Graduation:</div>
             <select id="graduation" name="graduation">
                 <!-- TODO: setting these explicitly seems a bit silly - maybe just dump out both this and the JS from Django. -->
-                <option value="2017-Fall">Fall 2017</option>
-                <option value="2018-Spring">Spring 2018</option>
-                <option value="2018-Summer">Summer 2018</option>
-                <option value="2018-Fall">Fall 2018</option>
-                <option value="2019-Spring">Spring 2019</option>
-                <option value="2019-Summer">Summer 2019</option>
-                <option value="2019-Fall">Fall 2019</option>
-                <option value="2020-Spring">Spring 2020</option>
-                <option value="2020-Summer">Summer 2020</option>
-                <option value="2020-Fall">Fall 2020</option>
-                <option value="2021-Spring">Spring 2021</option>
-                <option value="2021-Summer">Summer 2021</option>
-                <option value="2021-Fall">Fall 2021</option>
+                <option value="Fall2017">Fall 2017</option>
+                <option value="Spring2018">Spring 2018</option>
+                <option value="Summer2018">Summer 2018</option>
+                <option value="Fall2018">Fall 2018</option>
+                <option value="Spring2019">Spring 2019</option>
+                <option value="Summer2019">Summer 2019</option>
+                <option value="Fall2019" selected>Fall 2019</option>
+                <option value="Spring2020">Spring 2020</option>
+                <option value="Summer2020">Summer 2020</option>
+                <option value="Fall2020">Fall 2020</option>
+                <option value="Spring2021">Spring 2021</option>
+                <option value="Summer2021">Summer 2021</option>
+                <option value="Fall2021">Fall 2021</option>
             </select>
         </div>
         <div class="option-group">
@@ -162,20 +78,20 @@
             </select>
             per week.<br/>
             <a class="btn btn-default" onclick="javascript:refreshPlan();">Update Plan</a>
+            <a class="btn btn-default" onclick="javascript:savePlan();">Save Settings</a>
         </div>
-        <!-- <a class="btn btn-default" onclidk="javascript:savePlan();">Save Plan</a> -->
     </div>
 
-    <script type="text/javascript" src="{%  static "program-data/course-metadata.js" %}"></script>
+    <script type="text/javascript" src="/meta/courses"></script>
     <script type="text/javascript" src="{%  static "program-data/specialization-metadata.js" %}"></script>
     <script type="text/javascript">
         var upcomingTerms = [
-            "2016-Spring", "2016-Summer", "2016-Fall",
-            "2017-Spring", "2017-Summer", "2017-Fall",
-            "2018-Spring", "2018-Summer", "2018-Fall",
-            "2019-Spring", "2019-Summer", "2019-Fall",
-            "2020-Spring", "2020-Summer", "2020-Fall",
-            "2021-Spring", "2021-Summer", "2021-Fall"
+            "Spring2016", "Summer2016", "Fall2016",
+            "Spring2017", "Summer2017", "Fall2017",
+            "Spring2018", "Summer2018", "Fall2018",
+            "Spring2019", "Summer2019", "Fall2019",
+            "Spring2020", "Summer2020", "Fall2020",
+            "Spring2021", "Summer2021", "Fall2021"
         ];
 
         function evalConstraintTerms(type, terms, courses) {
@@ -206,7 +122,7 @@
             if (typeof constraint == "string") {
                 /*
                 return (courses.map(function (course) {
-                    course["Number"];
+                    course["Id"];
                 }).indexOf(constraint) > -1) ? 0 : -1;
                 */
                 return (courses.indexOf(constraint) > -1) ? 0 : -1;
@@ -234,69 +150,74 @@
             }
 
             var incompletePenalty = 0;
-            if (specializationId == "HPC") incompletePenalty = -100;
             if (specializationId == "ML") incompletePenalty = -50;
             if (specializationId == "Sys") incompletePenalty = -25;
             var hoursPenalty = -Math.max((10-courses.length)*0.5, 0);
             return evalConstraint(constraint, courses) + incompletePenalty + hoursPenalty;
         }
 
+        function evalFoundational(courses) {
+            var foundationalCourses = ['CV', 'AOS', 'HPC', 'CN', 'HPCA', 'SDP', 'SAD', 'CCA', 'KBAI', 'ML', 'IOS', 'DBSys'];
+            var count = 0;
+            for (var i = 0; i < courses.length; i++) {
+                if (courseIsFoundational(courses[i])) count++;
+            }
+            return count >= 2;
+        }
 
-        function courseInfo(number, term) {
+        function courseInfo(id, term) {
             // TODO: should pull from per-term info
-            for (key in courseMetadata) {
-                var course = courseMetadata[key];
-                if (course["Number"] == number) return course;
+            for (key in courseMetadata[term]) {
+                var course = courseMetadata[term][key];
+                if (course["Id"] == id) return course;
             }
             return null;
         }
 
-        function courseHours(number) {
-            var course = courseInfo(number);
+        function courseHours(id) {
+            var course = courseInfo(id);
             if (course != null)
                 // TODO: eventually all of this should come from the aggregated reviews.
                 // TODO: for now, they're based on my informal (manual) scan of UOCRSS,
                 // TODO: and some arbitrary "guesstimates" for new courses this term.
-                switch (number) {
-                    case "CS6210":
+                switch (id) {
+                    case "AOS": // "CS6210":
                         return 30;
-                    case "CS6250":
+                    case "CN": // "CS6250":
                         return 5;
-                    case "CS6300":
+                    case "SDP": // "CS6300":
                         return 10;
-                    case "CS7641":
+                    case "ML": // "CS7641":
                         return 30;
-                    case "CS8803-AIR":
+                    case "AIR": // "CS8803-AIR":
                         return 8;
-                    case "CS6290":
+                    case "HPCA": // "CS6290":
                         return 17;
-                    case "CS6310":
+                    case "SAD": // "CS6310":
                         return 9;
-                    case "CS6440":
+                    case "HIT": // "CS6440":
                         return 12;
-                    case "CS6505":
+                    case "CCA": // "CS6505":
                         return 16;
-                    case "CS7637":
+                    case "KBAI": // "CS7637":
                         return 15;
-                    case "CS4495":
+                    case "CV": // "CS4495", "CS6475":
                         return 15;
-                    case "CS6475":
-                        return 15;
-                    case "CS8803-IOS":
+                    case "IOS": // "CS8803-IOS":
                         return 18;
-                    case "CS6460":
+                    case "EdTech": // "CS6460":
                         return 20;
-                    case "CS7646":
+                    case "ML4T": // "CS7646":
                         return 2;
-                    case "CS8803-RL":
+                    case "RL": // "CS8803-RL":
                         return 5;
-                    case "CS6035":
+                    case "InfoSec": // "CS6035":
                         return 10;
-                    case "CSE6220":
+                    case "HPC": // "CSE6220":
                         return 15;
-                    case "CS8803-BD":
-                    case "CS6262":
-                    case "CS6400":
+                    case "BD4HIT": // "CS8803-BD":
+                    case "NetSec": // "CS6262":
+                    case "DBSys": // "CS6400":
                     default:
                         // ~_(ツ)_~
                         return 10;
@@ -305,6 +226,16 @@
                 //return course["Hours"];
             else
                 return 1000;
+        }
+
+        function courseIsFoundational(id) {
+            var foundationalCourses = ['CV', 'AOS', 'HPC', 'CN', 'HPCA', 'SDP', 'SAD', 'CCA', 'KBAI', 'ML', 'IOS', 'DBSys'];
+            for (var i = 0; i < foundationalCourses.length; i++) {
+                if (foundationalCourses[i] == id) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function termIsSummer(term) {
@@ -320,18 +251,9 @@
         }
 
         function termCoursesAvailable(term) {
-            // TODO: not retrieving the associated info from the corresponding term; retrieving it from the earliest one
-            var candidates = courseMetadata.filter(function (course) {
-                if (typeof course["Number"] == "undefined")
-                return false;
-                if (termIsSummer(term)) {
-                    return (course["Summer"]) && (upcomingTerms.indexOf(course["EffectiveFrom"]) <= upcomingTerms.indexOf(term));
-                } else {
-                    return (!course["Summer"]) && (upcomingTerms.indexOf(course["EffectiveFrom"]) <= upcomingTerms.indexOf(term));
-                }
-            });
+            var candidates = courseMetadata[term];
             return candidates.map(function (course) {
-                return course["Number"];
+                return course["Id"];
             });
         }
 
@@ -340,6 +262,21 @@
                     .reduce(function(previousValue, currentValue, index, array) {
                         return previousValue + currentValue;
                     }, 0);
+        }
+
+        function coursesInPlan(plan) {
+            var courses = [];
+            for (termName in plan) {
+                if (plan.hasOwnProperty(termName)) {
+                    term = plan[termName];
+                    for (i in term) {
+                        if (term.hasOwnProperty(i)) {
+                            courses.push(term[i]);
+                        }
+                    }
+                }
+            }
+            return courses;
         }
 
         /**
@@ -365,6 +302,9 @@
                 // never enhance the plan to include a duplicate course.
                 var coursesEligible = termCoursesAvailable(term).filter(function (course) {
                     return !(coursesIncluded.indexOf(course) > -1);
+                });
+                if (!evalFoundational(coursesIncluded)) coursesEligible = coursesEligible.filter(function (course) {
+                    return courseIsFoundational(course);
                 });
 
                 var termCourses = [];
@@ -401,6 +341,9 @@
                     coursesEligible = termCoursesAvailable(term).filter(function (course) {
                         return !(coursesIncluded.indexOf(course) > -1);
                     });
+                    if (!evalFoundational(coursesIncluded)) coursesEligible = coursesEligible.filter(function (course) {
+                        return courseIsFoundational(course);
+                    });
                     courseToAdd = null;
                 } while (coursesEligible.length > 0 && evalSpecialization(specialization, coursesIncluded) < 0);
                 byTerm[term] = termCourses;
@@ -420,6 +363,9 @@
                     var term = termsEligible[minTermIndex];
                     var coursesEligible = termCoursesAvailable(term).filter(function (course) {
                         return !(coursesIncluded.indexOf(course) > -1);
+                    });
+                    if (!evalFoundational(coursesIncluded)) coursesEligible = coursesEligible.filter(function (course) {
+                        return courseIsFoundational(course);
                     });
 
                     var courseToAdd = null;
@@ -466,27 +412,44 @@
             return byTerm;
         }
 
-        function displayPlan(plan) {
+        function displayTermName(termName) {
+            return termName.slice(0, -4) + " Term " + termName.slice(-4)
+        }
+
+        function displayPlan(plan, specialization) {
             $("#plan").html("");
             for (termName in plan) {
                 if (plan.hasOwnProperty(termName)) {
                     var term = plan[termName];
-                    var termBucket = $.parseHTML('<div class="term-wrapper"><div class="term-name">'+termName+'</div></div>');
+                    var termBucket = $.parseHTML('<div class="term-wrapper"><div class="term-name">'+displayTermName(termName)+'</div></div>');
+                    var display = false;
                     for (i in term) {
                         if (term.hasOwnProperty(i)) {
+                            display = true;
                             var course = courseInfo(plan[termName][i], termName);
                             var el = $.parseHTML('<div class="course-thumbnail"></div>');
+
+                            var deleteOption = $.parseHTML('<span class="delete-option fa fa-times-circle" style="position:relative;top:20pt;left:12pt;font-size:32pt"'
+                                    +'onclick="javascript:deleteCourse(\''+plan[termName][i]+'\');">'
+                                    +'</span>');
+                            termBucket[0].appendChild(deleteOption[0]);
+
                             var logo = $.parseHTML('<div class="course-logo">'
                                     +'<span class="number">'+course["Number"]+'</span><br/><span class="id">("'+course["Id"]+'")</span></div>');
                             el[0].appendChild(logo[0]);
 
                             var title = (typeof course["Title"] == "string") ? course["Title"] : course["Number"];
-                            var instructors = (typeof course["Instructors"] != "undefined") ? course["Instructors"].join("; ") : "";
+                            var instructors = (typeof course["Instructors"] != "undefined") ? course["Instructors"] : "";
                             var vitals = $.parseHTML('<div class="course-info">'
                                     +'<div class="title">'+title+'</div>'
                                     +'<div class="presenter">'+instructors+'</div>'
                                     +'</div>');
                             el[0].appendChild(vitals[0]);
+
+                            var link = $.parseHTML('<a href="/course/'+course["Ref"]+'/view" target="_blank"></a>');
+                            link[0].appendChild(el[0]);
+                            termBucket[0].appendChild(link[0]);
+                            /*
                             if (typeof course["Readiness"] == "string") {
                                 var link = $.parseHTML('<a href="'+course["Readiness"]+'" target="_blank"></a>');
                                 link[0].appendChild(el[0]);
@@ -494,11 +457,44 @@
                             } else {
                                 termBucket[0].appendChild(el[0]);
                             }
+                            */
                         }
                     }
-                    $("#plan").append(termBucket[0]);
+                    if (display) {
+                        $("#plan").append(termBucket[0]);
+                    }
                 }
             }
+        }
+
+        function displayGraduation(plan, specialization, completed) {
+            if (!($("#graduationBanner").length)) {
+                var el = $.parseHTML('<h3 id="graduationBanner" style="padding:20pt"></h3>');
+                $("#plan").append(el[0]);
+            }
+
+            var courses = coursesInPlan(plan).concat(completed);
+            if (evalSpecialization(specialization, courses) < 0) {
+                // Not graduating!
+                $("#graduationBanner").html('This set of courses will not allow you to graduate.');
+                $("#graduationBanner").css('color', '#DD4444');
+            } else {
+                var gradDate = null;
+                for (termName in plan) {
+                    if (plan.hasOwnProperty(termName) && plan[termName].length > 0) {
+                        gradDate = displayTermName(termName);
+                    }
+                }
+                $("#graduationBanner").html('Graduation!  Expected completion in '+gradDate+' with a specialization of '+specialization+'.');
+                $("#graduationBanner").css('color', 'inherit');
+            }
+        }
+
+        function recommendSpecialization(allowedSpecializations, fixedCourses) {
+            var specializationScores = allowedSpecializations.map(function (s) { return evalSpecialization(s, fixedCourses); });
+            // For now, we're picking the specialization they're closest to; later we'll give higher weights to scores
+            // that satisfy more than one specialization, especially early in the plan.
+            return allowedSpecializations[specializationScores.indexOf(Math.max.apply(Math, specializationScores))];
         }
 
         function refreshPlan() {
@@ -518,11 +514,81 @@
             });
             var gradDate = $('#graduation').val();
 
-            var plan = updatePlan(allowedSpecializations, gradDate, maxHours, []);
-            displayPlan(plan);
+            var plan = updatePlan(allowedSpecializations, gradDate, maxHours, completed);
+            var specialization = recommendSpecialization(allowedSpecializations, completed);
+            displayPlan(plan, specialization);
+            displayGraduation(plan, specialization, completed);
+            return plan;
         }
 
-        refreshPlan();
+        function savePlan() {
+            plan['csrfmiddlewaretoken'] = '{{csrf_token}}';
+            var url = '/profile/plan/';
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: plan,
+                success: function(data) { alert("Saved!"); },
+                error: function(data) {  }
+            });
+        }
+
+        function toggleAddCourseOptions() {
+            $('#addCourseTerm, #addCourseId, #addCourseConfirm').toggle("fast", function () {} );
+            updateAddCourseOptions();
+        }
+
+        function updateAddCourseOptions() {
+            var options = "";
+            var term = $('#addCourseTerm').val();
+            var courses = termCoursesAvailable(term);
+            for (i in courses) {
+                if (courses.hasOwnProperty(i)) {
+                    var courseId = courses[i];
+                    var course = courseInfo(courseId, term);
+                    if (course["Number"] && !(coursesInPlan(plan).concat(completed).indexOf(courseId) > -1))
+                        options = options+"<option value='"+courseId+"'>"+course["Number"]+"</option>";
+                }
+            }
+            $('#addCourseId').html(options);
+        }
+
+        function addCourse() {
+            var term = $('#addCourseTerm').val();
+            var course = $('#addCourseId').val();
+            plan[term].push(course);
+            $('#addCourseTerm, #addCourseId, #addCourseConfirm').toggle();
+            renderPlan();
+        }
+
+        function deleteCourse(courseId) {
+            for (termName in plan) {
+                if (plan.hasOwnProperty(termName)) {
+                    term = plan[termName];
+                    for (i in term) {
+                        if (term[i] == courseId) {
+                            term.splice(i, 1);
+                        }
+                    }
+                }
+            }
+            renderPlan();
+        }
+
+        function renderPlan() {
+            var allowedSpecializations = [];
+            $('#specializations input:checked').each(function(index) { allowedSpecializations.push($(this).val()); });
+            var specialization = recommendSpecialization(allowedSpecializations, completed);
+            displayPlan(plan, specialization);
+            displayGraduation(plan, specialization, completed);
+            return false;
+        }
+
+        var completed = [
+            {% for review in completed_courses %}
+                "{{ review.offering.course.key }}"{% if forloop.last %}{% else %},{% endif %}
+            {% endfor %}
+        ];
+        var plan = refreshPlan();
     </script>
-</body>
-</html>
+{% endblock %}

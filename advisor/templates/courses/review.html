@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block localstyles %}
+<style>
+    h2 {
+        padding: 10pt 20pt;
+    }
+    form {
+        padding: 10pt 140pt;
+    }
+    #content {
+        margin: 0pt auto;
+        max-width: 720pt;
+    }
+    .fieldWrapper {
+        padding: 2pt 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>Review {{ course.number }}: {{ course.title }} ({{ course.key }})</h2>
+<form action="/course/{{ course.id }}/review/" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+        {% if field.help_text %}
+        <p class="help">{{ field.help_text|safe }}</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% load staticfiles %}
+{% load menu %}{% generate_menu %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}omscs-advisor{% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "third-party/css/bootstrap.css" %}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="{%  static "third-party/js/jquery-2.1.4.js" %}"></script>
+    <script type="text/javascript" src="{%  static "third-party/js/jquery-ui.js" %}"></script>
+    <script type="text/javascript" src="{%  static "third-party/js/bootstrap.js" %}"></script>
+    {% block localstyles %} {% endblock %}
+</head>
+<body>
+    {% block navbar %}
+    <nav class="navbar navbar-default">
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+                <li><a href="/profile/info">Profile</a></li>
+                <li><a href="/planner">Planner</a></li>
+                <li><a href="/courses">Course index</a></li>
+                <li><a href="/logout">Logout</a></li>
+            {% else %}
+                <li><a href="/login/">Login</a></li>
+                <li><a href="/register/">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endblock %}
+<!--
+    <div id="sidebar">
+        {% block sidebar %}
+        <ul>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/profile/account">Account</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+    -->
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

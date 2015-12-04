@@ -1,0 +1,27 @@
+{% load controls %}
+
+<div class="review-thumbnail">
+    {% if show_reviewer and not review.anonymous %}
+    <div class="profile-image">
+        <span class="name">{{ review.user.username }}</span>
+        <span class="title">{{ review.user.profile.status }}</span>
+    </div>
+    {% else %}
+    <div class="course-logo">
+        <span class="number">{{ review.offering.course.number }}</span>
+        <span class="id">{{ review.offering.course.key }}</span>
+    </div>
+    {% endif %}
+    <div class="course-info">
+        {% if not review.anonymous %}
+            <a href="/profile/info/{{ review.user.id }}" target="_blank">
+        {% endif %}
+        <div class="comments">{{ review.comments|truncatechars:140 }}</div>
+        <div class="value callout"><span>Rating:</span><br/>{% rating review.value_rating %}</div>
+        <div class="difficulty callout"><span>Difficulty:</span><br/>{% rating review.difficulty_rating %}</div>
+        <div class="effort callout"><span>Workload:</span><br/><span>about {{ review.typical_effort }} hours</span></div>
+        {% if not review.anonymous %}
+            </a>
+        {% endif %}
+    </div>
+</div>

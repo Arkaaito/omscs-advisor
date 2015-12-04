@@ -1,0 +1,16 @@
+courseMetadata = {{% for term, offerings in terms.items %}
+    "{{ term }}": [{% for offering in offerings %}
+        {
+            "Ref": "{{ offering.course_id }}",
+            "Id": "{{ offering.course.key }}",
+            "Term": "{{ term }}",
+            "Number": "{{ offering.course.number }}",
+            "Title": "{{ offering.course.title }}",
+            "Summary": "{{ offering.course.summary|linebreaksbr }}",
+            "Instructors": "{{ offering.instructors }}",
+            "Syllabus": "{{ offering.course.syllabus }}",
+            "Readiness": "{{ offering.course.readiness }}",
+            "Specialization": "{{ offering.course.primary_specialization.key }}",
+        }{% if forloop.last %}{% else %},{% endif %}{% endfor %}
+    ]{% if forloop.last %}{% else %},{% endif %}{% endfor %}
+};

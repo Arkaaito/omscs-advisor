@@ -1,0 +1,9 @@
+specializationMetadata = [
+{% for specialization in specializations %}
+    "specializationName": "{{ specialization.name }}",
+    "specializationId": "{{ specialization.key }}",
+    {% for req in specialization.requirements %}
+
+    {% endfor %}
+{% endfor %}
+]
