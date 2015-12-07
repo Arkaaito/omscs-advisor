@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load thumbnails %}
+{% load controls %}
 
 {% block content %}
 <h1 style="text-align: center;">{{ course.number }}</h1>
@@ -20,9 +21,27 @@
         <a href="{{ course.syllabus_link }}">Recent syllabus</a>
     </div>
     {% endif %}
+
+    <br/><br/>
+
+    {% if offering.average_value != 0 %}
+    <div class="value callout"><span>Rating:</span><br/>{% rating offering.average_value %}</div>
+    {% endif %}
+    {% if offering.average_difficulty != 0 %}
+    <div class="difficulty callout"><span>Difficulty:</span><br/>{% rating offering.average_difficulty %}</div>
+    {% endif %}
+    {% if offering.median_typical_effort != 0 %}
+    <div class="effort callout"><span>Workload:</span><br/><span>about {{ offering.median_typical_effort }} hours</span></div>
+    {% endif %}
 </div>
 <div class="col-xs-12 col-lg-6" style="margin-top: 40pt">
     <h5><b>{{ offering.instructors }}</b> presenting</h5>
+    {% if friends %}
+    <h4>Friends in this course</h4>
+        {% for friend in friends %}
+            {% user_thumbnail_tiny friend %}
+        {% endfor %}
+    {% endif %}
 </div>
 
 <div class="col-xs-12" style="padding: 30pt 10pt; border-top:1pt #000000 solid;">

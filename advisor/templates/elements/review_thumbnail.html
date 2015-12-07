@@ -14,7 +14,7 @@
     {% endif %}
     <div class="course-info">
         {% if not review.anonymous %}
-            <a href="/profile/info/{{ review.user.id }}" target="_blank">
+            <a href="/profile/history/{{ review.user.id }}" target="_blank">
         {% endif %}
         <div class="comments">{{ review.comments|truncatechars:140 }}</div>
         <div class="value callout"><span>Rating:</span><br/>{% rating review.value_rating %}</div>

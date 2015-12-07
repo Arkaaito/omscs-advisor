@@ -155,3 +155,8 @@ a:hover .course-thumbnail, a:hover .review-thumbnail  {
 #addCoursePrompt, #addCourseConfirm, #addCourseId, #addCourseTerm {
     display: inline-block;
 }
+
+.follow-unfollow-link a {
+    color: #337ab7;
+    cursor: pointer;
+}

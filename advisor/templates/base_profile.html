@@ -1,23 +1,24 @@
 {% extends "base.html" %}
 
+{% load controls %}
+
 {% block content %}
 <body>
     <div id="sidebar" class="col-xs-4 col-lg-1">
         {% block sidebar %}
-        {% if viewee %}
         <ul>
-            <li><a href="/profile/info/{{ viewee.id }}">Bio</a></li>
-            <li><a href="/profile/history/{{ viewee.id }}">History</a></li>
-            <li><a href="/profile/plan/{{ viewee.id }}">Plan</a></li>
-        </ul>
-        {% elif user %}
-        <ul>
+        {% if viewee == viewer %}
             <li><a href="/profile/info/">Bio</a></li>
             <li><a href="/profile/history/">History</a></li>
             <li><a href="/profile/plan/">Plan</a></li>
             <li><a href="/profile/account/">Account</a></li>
-        </ul>
+        {% else %}
+            <li><a href="/profile/info/{{ viewee.id }}">Bio</a></li>
+            <li><a href="/profile/history/{{ viewee.id }}">History</a></li>
+            <li><a href="/profile/plan/{{ viewee.id }}">Plan</a></li>
+            <li>{% follow_button viewee.id %}</li>
         {% endif %}
+        </ul>
         {% endblock %}
     </div>
 

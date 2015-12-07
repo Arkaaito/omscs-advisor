@@ -7,10 +7,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.contrib.auth import login
 
 from advisor.config import Term
 from advisor.forms import ReviewForm
-from advisor.models import Course, Offering, Specialization, Review, Plan
+from advisor.models import Course, Offering, Specialization, Review, Plan, Profile
 
 import logging
 logger = logging.getLogger(__name__)
@@ -50,35 +51,55 @@ def browse_courses(request, term=Term.CURRENT):
     })
 
 def view_course(request, id, offering=None):
+    # TODO: remove me after resetting database
+    for user in User.objects.all():
+        try:
+            has_profile = (user.profile is not None)
+        except Profile.DoesNotExist:
+            Profile.objects.create(user=user)
+
     course = Course.objects.get(id=id)
     if offering is None:
-        offering = Offering.objects.get(course=course, term=Term.CURRENT)
+        try:
+            offering = Offering.objects.get(course=course, term=Term.CURRENT)
+        except Offering.DoesNotExist:
+            offering = Offering.objects.filter(course=course).order_by('term').first()
     else:
         offering = Offering.objects.get(course=course, id=offering)
     # TODO: error out if bad id / offering
+    friends_in_course = []
+    if request.user is not None:
+        friends = request.user.profile.friends.all()
+        for friend in friends:
+            if friend.profile.plans.filter(offering=offering).exists():
+                friends_in_course.append(friend)
+
+
     reviews = Review.objects.filter(offering__course=course).all()
     return render(request, "courses/view.html", {
         'course': course,
         'offering': offering,
-        'reviews': reviews
+        'reviews': reviews,
+        'friends': friends_in_course
     })
 
 # Something of a misnomer - really the review is associated with a particular offering.
 @login_required(login_url='/login/')
 def review_course(request, id):
-    # TODO: process post, etc.
     course = Course.objects.get(id=id)
     form = ReviewForm()
+    instance = None
+    offerings = Offering.objects.filter(course=course,term__in=Term.range(Term.FIRST, Term.CURRENT, all_terms=True))
+    if Review.objects.filter(offering__in=offerings,user=request.user).exists():
+        instance = Review.objects.get(offering__in=offerings, user=request.user)
     if request.method == 'POST':
-        form = ReviewForm(request.POST)
+        form = ReviewForm(request.POST, instance=instance)
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
             review.save()
             return HttpResponseRedirect("/profile/history")
-    offerings = Offering.objects.filter(course=course,term__in=Term.range(Term.FIRST, Term.CURRENT, all_terms=True))
-    if Review.objects.filter(offering__in=offerings,user=request.user).exists():
-        form = ReviewForm(instance=Review.objects.get(offering__in=offerings, user=request.user))
+    form = ReviewForm(instance=instance)
     form.fields["offering"].queryset = offerings
     return render(request, "courses/review.html", {
         'course': course,
@@ -98,7 +119,8 @@ def profile_info(request, viewed=None):
     viewed_user = get_viewed_user(request.user, viewed)
     if request.user == viewed_user:
         return render(request, "profile/edit_info.html", {
-            'user': viewed_user
+            'viewer': request.user,
+            'viewee': viewed_user
         })
     else:
         return render(request, "profile/info.html", {
@@ -144,6 +166,14 @@ def profile_plan(request, viewed=None):
     })
 
 @login_required(login_url='/login/')
+def profile_follow(request, followed=None):
+    followed_user = get_viewed_user(request.user, followed)
+    if (request.user == followed_user):
+        # No user provided - error out
+        return {}
+    return request.user.profile.friends.add(followed_user)
+
+@login_required(login_url='/login/')
 def profile_history(request, viewed=None):
     viewed_user = get_viewed_user(request.user, viewed)
     history = {}
@@ -170,7 +200,8 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            return HttpResponseRedirect("/planner/")
+            login(request, new_user)
+            return HttpResponseRedirect("/courses/")
     else:
         form = UserCreationForm()
     return render(request, "registration/register.html", {

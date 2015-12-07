@@ -22,3 +22,15 @@ def review_thumbnail(review, show_reviewer=True):
 @register.simple_tag()
 def term(term):
     return Term.format(term)
+
+@register.inclusion_tag('elements/user_thumbnail.html')
+def user_thumbnail(user):
+    return {
+        'user': user
+    }
+
+@register.inclusion_tag('elements/user_thumbnail_tiny.html')
+def user_thumbnail_tiny(user):
+    return {
+        'user': user
+    }

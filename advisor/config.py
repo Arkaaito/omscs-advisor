@@ -73,7 +73,7 @@ class Term:
 
     @staticmethod
     def compare_keys(item1, item2):
-        return Term.compare(item1.key, item2.key)
+        return Term.compare(item1[0], item2[0])
 
     @staticmethod
     def sort(terms):
