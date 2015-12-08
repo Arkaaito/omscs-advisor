@@ -38,7 +38,7 @@ def specialization_metadata(request):
 def planner(request):
     completed_courses = []
     if request.user != None:
-        completed_courses = Review.objects.filter(user=request.user,grade__gt=2).all()
+        completed_courses = Review.objects.filter(user=request.user).all()
     return render(request, "planner.html", {
         'completed_courses': completed_courses
     })

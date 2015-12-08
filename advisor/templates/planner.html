@@ -82,7 +82,7 @@
                 <option value="40">40</option>
             </select>
             per week.<br/>
-            <a class="btn btn-default" onclick="javascript:refreshPlan();">Update Plan</a>
+            <a class="btn btn-default" onclick="javascript:plan=refreshPlan();">Update Plan</a>
             <a class="btn btn-default" onclick="javascript:savePlan();">Save Settings</a>
         </div>
     </div>
@@ -594,6 +594,6 @@
                 "{{ review.offering.course.key }}"{% if forloop.last %}{% else %},{% endif %}
             {% endfor %}
         ];
-        var plan = refreshPlan();
+        plan = refreshPlan();
     </script>
 {% endblock %}
