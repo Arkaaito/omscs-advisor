@@ -92,6 +92,7 @@ def review_course(request, id):
     offerings = Offering.objects.filter(course=course,term__in=Term.range(Term.FIRST, Term.CURRENT, all_terms=True))
     if Review.objects.filter(offering__in=offerings,user=request.user).exists():
         instance = Review.objects.get(offering__in=offerings, user=request.user)
+    form = ReviewForm(instance=instance)
     if request.method == 'POST':
         form = ReviewForm(request.POST, instance=instance)
         if form.is_valid():
@@ -99,7 +100,6 @@ def review_course(request, id):
             review.user = request.user
             review.save()
             return HttpResponseRedirect("/profile/history")
-    form = ReviewForm(instance=instance)
     form.fields["offering"].queryset = offerings
     return render(request, "courses/review.html", {
         'course': course,
