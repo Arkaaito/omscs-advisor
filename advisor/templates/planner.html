@@ -594,6 +594,17 @@
                 "{{ review.offering.course.key }}"{% if forloop.last %}{% else %},{% endif %}
             {% endfor %}
         ];
-        plan = refreshPlan();
+
+        {% if plan %}
+            plan = [];
+            {% for term in plan %}
+                plan["{{ term.target_term }}"] = [{% for offering in term.offerings.all %}
+                    "{{ offering.course.key }}"
+                {% if forloop.last %}{% else %},{% endif %}{% endfor %}];
+            {% endfor %}
+            renderPlan();
+            {% else %}
+            plan = refreshPlan();
+        {% endif %}
     </script>
 {% endblock %}

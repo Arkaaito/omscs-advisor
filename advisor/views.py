@@ -37,9 +37,19 @@ def specialization_metadata(request):
 @login_required(login_url='/login/')
 def planner(request):
     completed_courses = []
+    plan = None
     if request.user != None:
         completed_courses = Review.objects.filter(user=request.user).all()
+        try:
+            plan = request.user.plans.all()
+        except Plan.DoesNotExist:
+            plan = None
+        def sort_plans(plan1, plan2):
+            return Term.compare(plan1.target_term, plan2.target_term)
+        plan = sorted(plan, sort_plans)
+
     return render(request, "planner.html", {
+        'plan': plan,
         'completed_courses': completed_courses
     })
 
