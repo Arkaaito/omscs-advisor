@@ -210,7 +210,7 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            return HttpResponseRedirect("/courses/")
+            return HttpResponseRedirect("/planner/")
     else:
         form = UserCreationForm()
     return render(request, "registration/register.html", {
