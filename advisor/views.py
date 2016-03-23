@@ -210,8 +210,6 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            authenticate(username=request.POST['username'], password=request.POST['password1'])
-            login(request, new_user)
             return HttpResponseRedirect("/courses/")
     else:
         form = UserCreationForm()
