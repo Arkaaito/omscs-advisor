@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
 
 from advisor.config import Term
 from advisor.forms import ReviewForm
@@ -210,6 +210,7 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
+            authenticate(username=request.POST['username'], password=request.POST['password'])
             login(request, new_user)
             return HttpResponseRedirect("/courses/")
     else:
