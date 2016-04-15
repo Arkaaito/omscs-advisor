@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Some Random Course Stats</title>
+</head>
+<body>
+{% for stats in stats_by_term %}
+<h2>{{ stats.semester_name }}</h2>
+<table>
+    <tr>
+        <th>Course number</th>
+        <th>Course name</th>
+        <th>Current open seats</th>
+        <th>Open last year (end of drop/add week)</th>
+        <th>Current open waitlist seats</th>
+        <th>Drop/add CRN</th>
+        <th>Last updated</th>
+    </tr>
+    {% for course in stats.courses %}
+        <tr>
+            <th>{{ course.number }}</th>
+            <th>{{ course.name }}</th>
+            <th>{{ course.latest.real_open }}/{{ course.latest.real_cap }}</th>
+            <th>{{ course.prev.real_open }}/{{ course.prev.real_cap }}</th>
+            <th>{{ course.latest.waitlist_open }}/{{ course.latest.waitlist_cap }}</th>
+            <th>{{ course.crn }}</th>
+            <th><a href="https://oscar.gatech.edu/pls/bprod/bwckschd.p_disp_detail_sched?term_in={{ stats.semester_code }}&crn_in={{ course.crn }}">{{ course.latest.recorded }}</a></th>
+        </tr>
+    {% endfor %}
+</table>
+{% endfor %}
+</body>
+</html>

@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from advisor.config import Term
 
-# Create your models here.
 
 class TermField(models.CharField):
     def __init__(self, *args, **kwargs):
@@ -15,10 +14,12 @@ class TermField(models.CharField):
         del kwargs['max_length']
         return name, path, args, kwargs
 
+
 class Specialization(models.Model):
     key = models.CharField(max_length=10) # like "ML"
     name = models.CharField(max_length=50) # like "Machine Learning"
     requirements = models.ForeignKey('Requirement', null=True) # link to the top-level requirement
+
 
 class Requirement(models.Model):
     ONE_OF = 'oneOf'
@@ -37,6 +38,7 @@ class Requirement(models.Model):
     course = models.ForeignKey('Course', null=True)
     type = models.CharField(max_length=8, choices=CONSTRAINT_TYPES)
 
+
 class Course(models.Model):
     key = models.CharField(max_length=10) # like "AIR"
     number = models.CharField(max_length=10) # like "CS8803-O01"
@@ -49,9 +51,11 @@ class Course(models.Model):
     readiness_link = models.URLField(max_length=200, null=True)
     primary_specialization = models.ForeignKey('Specialization', null=True)
 
+
 class Offering(models.Model):
     course = models.ForeignKey(Course, related_name='offerings', related_query_name='offering')
     term = TermField()
+    crn = models.PositiveIntegerField(null=True)
     instructors = models.CharField(max_length=120, null=True)
     grades_udacity = models.BooleanField()
     grades_piazza = models.BooleanField()
@@ -70,6 +74,7 @@ class Offering(models.Model):
 
     def __str__(self):
         return self.term[0:-4] + " " + self.term[-4:]
+
 
 class Review(models.Model):
     GRADE_A = 4.0
@@ -96,16 +101,19 @@ class Review(models.Model):
     comments = models.TextField(blank=True)
     anonymous = models.BooleanField(default=False)
 
+
 class Announcement(models.Model):
     title = models.TextField()
     body = models.TextField()
     posted = models.DateTimeField()
+
 
 class Notification(models.Model):
     announcement = models.ForeignKey(Announcement, null=True)
     title = models.TextField()
     body = models.TextField()
     triggered = models.DateTimeField()
+
 
 class Profile(models.Model):
     PROSPECT = 'P'
@@ -138,6 +146,7 @@ class Profile(models.Model):
     facebook_id = models.CharField(max_length=50, blank=True)
     google_id = models.CharField(max_length=50, blank=True)
 
+
 class Preferences(models.Model):
     user = models.OneToOneField(User, related_name="preferences", related_query_name="preferences")
     specializations = models.ManyToManyField(Specialization)
@@ -147,10 +156,12 @@ class Preferences(models.Model):
     allow_groupwork = models.BooleanField(default=True)
     max_hours = models.PositiveSmallIntegerField(default=20)
 
+
 class Plan(models.Model):
     user = models.ForeignKey(User, related_name="plans", related_query_name="plan")
     offerings = models.ManyToManyField(Offering)
     target_term = TermField()
+
 
 class Privacy(models.Model):
     PRIVATE = 0
