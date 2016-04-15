@@ -17,6 +17,10 @@ class Command(BaseCommand):
     args = '/path/to/course-metadata.js /path/to/specialization-metadata.js'
     help = 'Import new course/specialization metadata or update the old stuff.'
 
+    def add_arguments(self, parser):
+        parser.add_argument('course-data', nargs=1)
+        parser.add_argument('specialization-data', nargs=1)
+
     def build_requirements(self, specialization, type, value):
         req = Requirement()
         req.linked_specialization = specialization
@@ -49,7 +53,7 @@ class Command(BaseCommand):
         return req
 
     def handle(self, *args, **options):
-        specialization_file = open(args[1])
+        specialization_file = open(options['specialization-data'][0])
         raw_specializations = json.load(specialization_file)
         for raw_specialization in raw_specializations:
             # Create a specialization entry
@@ -64,7 +68,7 @@ class Command(BaseCommand):
             # TODO: Current method leads to "orphaned" requirements.  Fix this?
         specialization_file.close()
 
-        course_file = open(args[0])
+        course_file = open(options['course-data'][0])
         raw_courses = json.load(course_file)
         for raw_course in raw_courses:
             # For each course, create or update Course

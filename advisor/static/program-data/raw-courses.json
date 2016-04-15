@@ -469,7 +469,7 @@
         "Id": "BD4HIT",
         "Summer": false,
         "EffectiveFrom": "Spring2016",
-        "Number": "CS8803-BD",
+        "Number": "CSE8803",
         "Title": "Special Topics: Big Data for Health Informatics",
         "Summary": "In healthcare, large amounts of heterogeneous medical data have become available in various healthcare organizations (payers, providers, pharmaceuticals). Those data could be an enabling resource for deriving insights for improving care delivery and reducing waste. The enormity and complexity of these datasets present great challenges in analyses and subsequent applications to a practical clinical environment. In this course, we introduce the characteristics of medical data and associated data mining challenges on dealing with such data. We cover various algorithms and systems for big data analytics. We focus on studying those big data techniques in the context of concrete healthcare analytic applications such as predictive modeling, computational phenotyping and patient similarity.",
         "Instructors": ["Sun, Jimeng"],
@@ -486,13 +486,6 @@
         "WrittenAssignments": 0
     },
     {
-        "Id": "NetSec",
-        "Summer": false,
-        "EffectiveFrom": "Fall2016",
-        "Number": "CS6262",
-        "Title": "Network Security"
-    },
-    {
         "Id": "DBSys",
         "Summer": false,
         "EffectiveFrom": "Spring2016",
@@ -502,7 +495,7 @@
     {
         "Id": "AI",
         "Summer": false,
-        "EffectiveFrom": "Fall2016",
+        "EffectiveFrom": "Spring2016",
         "Number": "CS6601",
         "Title": "Artificial Intelligence"
     },
@@ -512,6 +505,80 @@
         "EffectiveFrom": "Spring2016",
         "Number": "CS6340",
         "Title": "Software Analysis and Test"
+    },
+    {
+        "Id": "InfoSec",
+        "Summer": true,
+        "EffectiveFrom": "Summer2016",
+        "Number": "CS6035",
+        "Title": "Introduction to Information Security",
+        "Summary": "Introduction to Information Security is a graduate-level introductory course in information security. It teaches the basic concepts and principles of information security, and the fundamental approaches to secure computers and networks. Its main topics include: security basics, security management and risk assessment, software security, operating systems security, database security, cryptography algorithms and protocols, network authentication and secure network applications, malicious malware, network threats and defenses, web security, mobile security, legal and ethical issues, and privacy.",
+        "Instructors": ["Lee, Wenke", "Ahamad, Mustaque"],
+        "Syllabus": null,
+        "Readiness": "http://www.omscs.gatech.edu/wp-content/uploads/2015/04/CS-6035-Course-Readiness-Survey.pdf",
+        "UdacityRequired": true,
+        "PiazzaRequired": false,
+        "Specialization": "Sys",
+        "ProctoredExams": 2,
+        "TimedExams": 0,
+        "OpenBookExams": 0,
+        "GroupProjects": 0,
+        "CodingAssignments": 5,
+        "WrittenAssignments": 0
+    },
+    {
+        "Id": "SAD",
+        "Summer": true,
+        "EffectiveFrom": "Summer2016",
+        "Number": "CS6310",
+        "Title": "Software Architecture and Design",
+        "Summary": "Software Architecture and Design teaches the principles and concepts involved in the analysis and design of large software systems. This course is split into four sections: (1) Introduction, (2) UML and Analysis, (3) Software Architecture, and (4) Software Design.",
+        "Instructors": ["Rugaber, Spencer"],
+        "Syllabus": "https://www.udacity.com/wiki/saad",
+        "Readiness": "http://www.omscs.gatech.edu/cs-6310-software-architecture-design/",
+        "UdacityRequired": true,
+        "PiazzaRequired": false,
+        "Specialization": "Sys",
+        "ProctoredExams": 1,
+        "TimedExams": 0,
+        "OpenBookExams": 0,
+        "GroupProjects": 2,
+        "CodingAssignments": 2,
+        "WrittenAssignments": 8
+    },
+    {
+        "Id": "SAT",
+        "Summer": true,
+        "EffectiveFrom": "Summer2016",
+        "Number": "CS6340",
+        "Title": "Software Analysis and Test"
+    },
+    {
+        "Id": "RL",
+        "Summer": true,
+        "EffectiveFrom": "Summer2016",
+        "Number": "CS8803-RL",
+        "Title": "Reinforcement Learning",
+        "Summary": "Through a combination of classic papers and more recent work, the course explores automated decision making from a computational perspective. It examines efficient algorithms, where they exist, for single agent and multiagent planning as well as approaches to learning near-optimal decisions from experience.\n\nTopics include Markov decision processes, stochastic and repeated games, partially observable Markov decision processes, and reinforcement learning. Of particular interest will be issues of generalization, exploration, and representation. Students will replicate a result in a published paper in the area.",
+        "Instructors": ["Isbell, Charles", "Littman, Michael"],
+        "Syllabus": null,
+        "Readiness": "http://www.omscs.gatech.edu/courses/cs-8803-special-topics-reinforcement-learning/",
+        "UdacityRequired": false,
+        "PiazzaRequired": false,
+        "Specialization": "ML",
+        "ProctoredExams": 1,
+        "TimedExams": 0,
+        "OpenBookExams": 0,
+        "GroupProjects": 0,
+        "CodingAssignments": 11,
+        "WrittenAssignments": 1
+    },
+    {
+        "Id": "NetSec",
+        "Summer": false,
+        "EffectiveFrom": "Fall2016",
+        "Number": "CS6262",
+        "Title": "Network Security"
     },
     {
         "Id": "DVA",
