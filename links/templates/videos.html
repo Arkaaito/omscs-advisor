@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load controls %}
+
+{% block title %}
+    Lecture Videos - {{ name }}
+{% endblock %}
+
+{% block content %}
+    <div id="sidebar" class="col-xs-4 col-lg-1">
+        {% block sidebar %}
+        <ul>
+            <li><a href="/lectures/orientation">Orientation</a></li>
+            <!--<li><a href="/lectures/cs6035">CS6035</a></li>-->
+            <!--<li><a href="/lectures/cs6210">CS6210</a></li>-->
+            <!--<li><a href="/lectures/cse6220">CSE6220</a></li>-->
+            <li><a href="/lectures/cse6242">CSE6242</a></li>
+            <!--<li><a href="/lectures/cs6250">CS6250</a></li>-->
+            <li><a href="/lectures/cs6262">CS6262</a></li>
+            <!--<li><a href="/lectures/cs6290">CS6290</a></li>-->
+            <!--<li><a href="/lectures/cs6300">CS6300</a></li>-->
+            <!--<li><a href="/lectures/cs6310">CS6310</a></li>-->
+            <li><a href="/lectures/cs6340">CS6340</a></li>
+            <li><a href="/lectures/cs6400">CS6400</a></li>
+            <!--<li><a href="/lectures/cs6440">CS6440</a></li>-->
+            <!--<li><a href="/lectures/cs6460">CS6460</a></li>-->
+            <!--<li><a href="/lectures/cs6475">CS6475</a></li>-->
+            <!--<li><a href="/lectures/cs6476">CS6476</a></li>-->
+            <!--<li><a href="/lectures/cs6505">CS6505</a></li>-->
+            <li><a href="/lectures/cs6601">CS6601</a></li>
+            <li><a href="/lectures/cs6750">CS6750</a></li>
+            <!--<li><a href="/lectures/cs7637">CS7637</a></li>-->
+            <!--<li><a href="/lectures/cs7641">CS7641</a></li>-->
+            <!--<li><a href="/lectures/cs7646">CS7646</a></li>-->
+            <!--<li><a href="/lectures/cse8803">CSE8803: Big Data</a></li>-->
+            <!--<li><a href="/lectures/cs8803-O01">CS8803: AIR</a></li>-->
+            <!--<li><a href="/lectures/cs8803-O02">CS8803: IOS</a></li>-->
+            <!--<li><a href="/lectures/cs8803-O03">CS8803: RL</a></li>-->
+            <li><a href="/lectures/cs8803-O04">CS8803: ES</a></li>
+            <li><a href="/lectures/cs8803-O07">CS8803: CPSS</a></li>
+            <!--<li><a href="/lectures/cs8803-GA">CS8803: Algorithms</a></li>-->
+        </ul>
+        {% endblock %}
+    </div>
+
+    <div id="main_pane" class="col-xs-8 col-lg-11">
+        {% block main_pane %}
+            <ul>
+            {% for link_group, links in link_groups.items %}
+                <li>
+                    {{ link_group }}
+                    <ul>
+                    {% for link_name, link_url in links.items %}
+                        <li><a href="{{ link_url }}">{{ link_name }}</a></li>
+                    {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endblock %}
+    </div>
+{% endblock %}

@@ -30,5 +30,43 @@
     {% endfor %}
 </table>
 {% endfor %}
+<h2>Real-Time Data</h2>
+<a onclick="loadOscar('201605')">Summer 2016</a> or <a onclick="loadOscar('201608')">Fall 2016</a>
+<form id="oscarParams" style="display:none;" method="post" action="https://oscar.gatech.edu/pls/bprod/bwckschd.p_get_crse_unsec">
+    <input type="hidden" id="oscarTerm" name="term_in" />
+    <input type="hidden" name="sel_subj" value="dummy" />
+    <input type="hidden" name="sel_day" value="dummy" />
+    <input type="hidden" name="sel_schd" value="dummy" />
+    <input type="hidden" name="sel_insm" value="dummy" />
+    <input type="hidden" name="sel_camp" value="dummy" />
+    <input type="hidden" name="sel_levl" value="dummy" />
+    <input type="hidden" name="sel_sess" value="dummy" />
+    <input type="hidden" name="sel_instr" value="dummy" />
+    <input type="hidden" name="sel_ptrm" value="dummy" />
+    <input type="hidden" name="sel_attr" value="dummy" />
+    <input type="hidden" name="sel_subj" value="CSE" />
+    <input type="hidden" name="sel_subj" value="CS" />
+    <input type="hidden" name="sel_crse" value="" />
+    <input type="hidden" name="sel_title" value="" />
+    <input type="hidden" name="sel_cchd" value="%" />
+    <input type="hidden" name="sel_from_cred" value="" />
+    <input type="hidden" name="sel_to_cred" value="" />
+    <input type="hidden" name="sel_camp" value="0" />
+    <input type="hidden" name="sel_ptrm" value="%" />
+    <input type="hidden" name="sel_instr" value="%" />
+    <input type="hidden" name="sel_attr" value="%" />
+    <input type="hidden" name="begin_hh" value="0" />
+    <input type="hidden" name="begin_mi" value="0" />
+    <input type="hidden" name="begin_ap" value="a" />
+    <input type="hidden" name="end_hh" value="0" />
+    <input type="hidden" name="end_mi" value="0" />
+    <input type="hidden" name="end_ap" value="a" />
+</form>
+<script type="application/javascript">
+    function loadOscar(termIn) {
+        $('#oscarTerm').val(termIn);
+        $('#oscarParams').submit();
+    }
+</script>
 </body>
 </html>

@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.contrib.auth.views import login, logout
 from advisor import views as advisor
 from stats import views as stats
+import links
 
 urlpatterns = [
     url(r'^', include('django.contrib.auth.urls')),
@@ -34,5 +35,6 @@ urlpatterns = [
     url(r'^courses/', advisor.browse_courses),
     url(r'^course/(?P<id>\d+)/view/$', advisor.view_course),
     url(r'^course/(?P<id>\d+)/review/$', advisor.review_course),
-    url(r'^stats/', stats.dashboard)
+    url(r'^stats/', stats.dashboard),
+    url(r'^links/', include(links.urls))
 ]
